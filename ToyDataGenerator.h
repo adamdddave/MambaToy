@@ -6,6 +6,9 @@
 #include <cmath>
 #include <assert.h>
 #include <string>
+#include <stdexcept>
+
+
 //root
 #include <TH1.h>
 #include <TCanvas.h>
@@ -26,10 +29,31 @@
 #include <RooLandau.h>
 #include <RooFFTConvPdf.h>
 
+
 using namespace RooFit ;
 using namespace std;
 class ToyDataGenerator {
 public:
+
+  class  NotSuchBeetleChip: public std::runtime_error
+  {
+  public:
+    NotSuchBeetleChip(const std::string &msg) :
+      std::runtime_error(msg)
+    {
+    }
+  };
+
+  class  WrongChannelNumber: public std::runtime_error
+  {
+  public:
+    WrongChannelNumber(const std::string &msg) :
+      std::runtime_error(msg)
+    {
+    }
+  };
+
+
   ToyDataGenerator(int seed = 0, int nevt = 100, int nBeetle = 4);
   virtual ~ToyDataGenerator(){};
   void clear_histograms();
@@ -37,10 +61,13 @@ public:
   void generateEvent(int ev);
   void generateSignal();
   void combineEvent();
+
+  int getSignal(int beetleNmuber, int channelNumber);
+private:
+
   TH1D* m_signals[4];
   TH1D* m_pedestals[4];
   TH1D* m_event[4];
-private:
   int m_nevt;
   int m_seed;
   int m_nBeetle;

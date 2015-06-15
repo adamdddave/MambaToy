@@ -7,7 +7,7 @@ ROOTGLIBS     = $(shell $(ROOTSYS)/bin/root-config --glibs)
 #ROOTGLIBS     = $(shell /usr/bin/root-config --glibs)
 
 CXX           = g++
-CXXFLAGS      = -g -Wall -fPIC -Wno-deprecated
+CXXFLAGS      = -g -std=gnu++11 -Wall -fPIC -Wno-deprecated
 
 NGLIBS         = $(ROOTGLIBS) 
 #NGLIBS        += -lMinuit

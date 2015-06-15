@@ -138,3 +138,18 @@ void ToyDataGenerator::combineEvent(){
     m_event[i]->Add(m_signals[i]);
   }
 }
+
+
+int ToyDataGenerator::getSignal(int beetleNmuber, int channelNumber)
+{
+  int beetleChips=4;
+  if (beetleNmuber>beetleChips){
+      throw NotSuchBeetleChip("not such beetle: "+std::to_string(beetleNmuber));
+  }
+  int channelsNumber=128;
+  if (channelNumber>channelsNumber) throw WrongChannelNumber("Wrong channel Number: "+ std::to_string(channelNumber));
+
+  return m_event[beetleNmuber]->GetBinContent(channelNumber);
+}
+
+
