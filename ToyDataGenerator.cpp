@@ -139,17 +139,29 @@ void ToyDataGenerator::combineEvent(){
   }
 }
 
-
 int ToyDataGenerator::getSignal(int beetleNmuber, int channelNumber)
 {
-  int beetleChips=4;
-  if (beetleNmuber>beetleChips){
-      throw NotSuchBeetleChip("not such beetle: "+std::to_string(beetleNmuber));
-  }
-  int channelsNumber=128;
-  if (channelNumber>channelsNumber) throw WrongChannelNumber("Wrong channel Number: "+ std::to_string(channelNumber));
-
   return m_event[beetleNmuber]->GetBinContent(channelNumber);
 }
+
+
+I_ToyDataGenerator::SignalMap ToyDataGenerator::getSignalMap()
+{
+  I_ToyDataGenerator::SignalMap signalMap;
+  int channelsNumber=128;
+  for(int beetle=0;beetle<m_nBeetle;beetle++){
+      I_ToyDataGenerator::SignalVector signalVector;
+      for (int channel=0;channel<channelsNumber;channel++){
+	  int adcData=getSignal(beetle,channel);
+	  signalVector.push_back(adcData);
+      }
+      signalMap.insert(std::make_pair(beetle,signalVector));
+  }
+  return signalMap;
+}
+
+
+
+
 
 

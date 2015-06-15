@@ -7,7 +7,7 @@
 #include <assert.h>
 #include <string>
 #include <stdexcept>
-
+#include <map>
 
 //root
 #include <TH1.h>
@@ -32,7 +32,30 @@
 
 using namespace RooFit ;
 using namespace std;
-class ToyDataGenerator {
+
+
+class I_ToyDataGenerator
+{
+public:
+
+  typedef std::vector<int > SignalVector;
+  typedef std::map<int, SignalVector> SignalMap;
+
+  virtual ~I_ToyDataGenerator(){};
+  virtual void clear_histograms()=0;
+  virtual void generatePedestal()=0;
+  virtual void generateEvent(int ev)=0;
+  virtual void generateSignal()=0;
+  virtual void combineEvent()=0;
+
+  virtual SignalMap getSignalMap()=0;
+
+};
+
+
+
+class ToyDataGenerator : public I_ToyDataGenerator
+{
 public:
 
   class  NotSuchBeetleChip: public std::runtime_error
@@ -61,9 +84,11 @@ public:
   void generateEvent(int ev);
   void generateSignal();
   void combineEvent();
+  I_ToyDataGenerator::SignalMap getSignalMap();
 
-  int getSignal(int beetleNmuber, int channelNumber);
 private:
+
+   int getSignal(int beetleNmuber, int channelNumber);
 
   TH1D* m_signals[4];
   TH1D* m_pedestals[4];

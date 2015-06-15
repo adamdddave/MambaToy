@@ -2,12 +2,8 @@ ROOTCFLAGS    = $(shell $(ROOTSYS)/bin/root-config --cflags)
 ROOTLIBS      = $(shell $(ROOTSYS)/bin/root-config --libs)
 ROOTGLIBS     = $(shell $(ROOTSYS)/bin/root-config --glibs)
 
-#ROOTCFLAGS    = $(shell /usr/bin/root-config --cflags)
-#ROOTLIBS      = $(shell /usr/bin/root-config --libs)
-#ROOTGLIBS     = $(shell /usr/bin/root-config --glibs)
-
 CXX           = g++
-CXXFLAGS      = -g -std=gnu++11 -Wall -fPIC -Wno-deprecated
+CXXFLAGS      = -g -std=gnu++11 -Wall -fPIC -Wno-deprecated -fpermissive
 
 NGLIBS         = $(ROOTGLIBS) 
 #NGLIBS        += -lMinuit
@@ -29,8 +25,7 @@ OUTLIB	      = ./lib/
 all:  MilanoDaqToys
 
 MilanoDaqToys: runner.cpp 
-	$(CXX) $(CXXFLAGS) ToyDataGenerator.cpp -o MilanoDAQToys  $(GLIBS) $<
+	$(CXX) $(CXXFLAGS) ToyDataGenerator.cpp  FileWriter.cpp -o MilanoDAQToys  $(GLIBS) $<
 
 clean:
 	rm -f MilanoDAQToys
-#	rm -rf *dSYM

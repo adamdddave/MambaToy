@@ -5,6 +5,7 @@
 
 //external
 #include "ToyDataGenerator.h"
+#include "FileWriter.h"
 
 int main(int argc, char* const argv[]){
   std::cout<<"Toy Data Generator for Milano DAQ testing"<<std::endl;
@@ -20,14 +21,24 @@ int main(int argc, char* const argv[]){
   }
   ToyDataGenerator gen(seed,nev);
   gen.generateSignal();//sample everything first.
-  for(int i=0; i<nev;++i){
-    gen.generatePedestal();
-    gen.generateEvent(i);
-    gen.combineEvent();
-    //write the file
-    int adcVals[4*128];
-    //I don't know what to do here.
-    gen.clear_histograms();//start again
+
+  try{
+      FileWriter fileWriter("MambaMC.dat");
+      for(int i=0; i<nev;++i){
+        gen.generatePedestal();
+        gen.generateEvent(i);
+        gen.combineEvent();
+
+        //write to file
+        I_ToyDataGenerator::SignalMap signalMap=gen.getSignalMap();
+        fileWriter.setData(signalMap);
+        fileWriter.writeEventToFile();
+
+        gen.clear_histograms();//start again
+      }
+      return 0;
+  }catch(I_FileWriter::InputFileError& ex){
+      cout<<ex.what()<<endl;
+      return -1;
   }
-  return 0;
 }
